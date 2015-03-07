@@ -17,7 +17,6 @@ class Router {
 		if (empty($route)) {
 			$route = URLParser::parseCurrentURLSegments();
 		}
-
 		$routeCalled = null;
 		$routeString = is_array($route) ? "/".implode("/", $route) : $route;
 		if (!is_array($route)) $route = explode("/", $route);
@@ -50,8 +49,9 @@ class Router {
 		if (empty($routeCalled)) throw new RuntimeException("Route ".$routeString." is not defined");
 
 		if (is_array($route) && count($route)==1) $route = array();
+		if (!is_array($route)) $route = array($route);
 		if (is_callable($routeCalled)) {;
-			call_user_func_array($routeCalled, array($route));
+			call_user_func_array($routeCalled, $route);
 			exit();
 		}
 		//is this a class route
